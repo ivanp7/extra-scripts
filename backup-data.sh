@@ -1,74 +1,81 @@
-#!/bin/bash
+#!/bin/sh
 
-CLOUD_HOSTNAME=home-primary
+backup ()
+{
+    local category="$1"
+    local host="$2"
+    local disk="$3"
+    shift 3
 
-DESCRIPTION="$(grep "^$CLOUD_HOSTNAME " $HOME/.ssh_known_hosts)"
-read -r _ _ CLOUD_ADDRESS CLOUD_PORT _ _ <<< "$DESCRIPTION"
+    echo
+    echo "===================================================================="
+    echo "Backing up '$category' to '$place' of host '$host'."
+    echo "--------------------------------------------------------------------"
+    echo
 
-echo $CLOUD_ADDRESS:$CLOUD_PORT
+    remote.ros -h "$host" -o upload --rsync-opts " -arz" -l "$HOME/data/$category" -r "/mnt/$disk/data/$category" "$@"
+}
 
-# Setting this, so the repo does not need to be given on the commandline:
-export BORG_REPO=ssh://borg@$CLOUD_ADDRESS:$CLOUD_PORT/~/repo/data
-export BORG_PASSPHRASE='save the data, save me'
+###############################################################################
 
-DATA_DIRECTORY=$HOME/HostShared/Workspace/Data
+PRIMARY_HOST="home-1"
 
-# some helpers and error handling:
-info() { printf "\n%s %s\n\n" "$(date)" "$*" >&2; }
-trap 'echo $(date) Backup interrupted >&2; exit 2' INT TERM
+backup_primary_seagate ()
+{
+    local category="$1"
+    shift 1
+    backup "$category" "$PRIMARY_HOST" seagate "$@"
+}
 
-info "Starting backup"
+backup_primary_wdc ()
+{
+    local category="$1"
+    shift 1
+    backup "$category" "$PRIMARY_HOST" wdc "$@"
+}
 
-# Backup the most important directories into an archive named after
-# the machine this script is currently running on:
+backup_primary_hitachi ()
+{
+    local category="$1"
+    shift 1
+    backup "$category" "$PRIMARY_HOST" hitachi "$@"
+}
 
-borg create                         \
-    --verbose                       \
-    --filter AME                    \
-    --list                          \
-    --stats                         \
-    --show-rc                       \
-    --compression lz4               \
-    --exclude-caches                \
-                                    \
-    ::'{hostname}-{now}'            \
-    $DATA_DIRECTORY                 \
+###############################################################################
 
-    # --exclude '/home/*/.cache/*'    \
-    # --exclude '/var/cache/*'        \
-    # --exclude '/var/tmp/*'          \
+SECONDARY_HOST="home-2"
 
-backup_exit=$?
+backup_secondary_samsung ()
+{
+    local category="$1"
+    shift 1
+    backup "$category" "$SECONDARY_HOST" samsung "$@"
+}
 
-info "Pruning repository"
+###############################################################################
+###############################################################################
 
-# Use the `prune` subcommand to maintain 7 daily, 4 weekly and 6 monthly
-# archives of THIS machine. The '{hostname}-' prefix is very important to
-# limit prune's operation to this machine's archives and not apply to
-# other machines' archives also:
+backup_primary_seagate activities
+backup_primary_seagate archive
+backup_primary_seagate downloads
+backup_primary_seagate encrypted-directories
+backup_primary_seagate files
+backup_primary_seagate git
+backup_primary_seagate library
+backup_primary_seagate media
+backup_primary_seagate Windows
 
-borg prune                          \
-    --list                          \
-    --prefix '{hostname}-'          \
-    --show-rc                       \
-    --keep-daily    7               \
-    --keep-weekly   4               \
-    --keep-monthly  6               \
+backup_primary_wdc     activities
+backup_primary_wdc     archive
+backup_primary_wdc     encrypted-directories
+backup_primary_wdc     files
+backup_primary_wdc     git
+backup_primary_wdc     library
 
-prune_exit=$?
+backup_primary_hitachi vm
 
-# use highest exit code as global exit code
-global_exit=$(( backup_exit > prune_exit ? backup_exit : prune_exit ))
-
-if [ ${global_exit} -eq 1 ];
-then
-    info "Backup and/or Prune finished with a warning"
-fi
-
-if [ ${global_exit} -gt 1 ];
-then
-    info "Backup and/or Prune finished with an error"
-fi
-
-exit ${global_exit}
+backup_secondary_samsung activities
+backup_secondary_samsung files
+backup_secondary_samsung git
+backup_secondary_samsung library
 
