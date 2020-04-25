@@ -11,7 +11,7 @@ backup ()
 
     echo
     echo "===================================================================="
-    echo "Backing up '$category' to '$place' of host '$host'."
+    echo "Backing up '$category' to disk '$disk' of host '$host'."
     echo "--------------------------------------------------------------------"
     echo
 
