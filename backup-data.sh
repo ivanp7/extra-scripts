@@ -15,7 +15,7 @@ backup ()
     echo "--------------------------------------------------------------------"
     echo
 
-    remote.ros -h "$host" -wo upload --rsync-opts " -arz" -l "$HOME/data/$category/" -r "/mnt/$disk/data/$category/" "$@" $OPTIONS
+    remote.ros -h "$host" -wo upload -l "$HOME/data/$category/" -r "/mnt/$disk/data/$category/" "$@" $OPTIONS --rsync-opts -arz
 }
 
 ###############################################################################
