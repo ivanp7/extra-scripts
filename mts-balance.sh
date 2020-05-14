@@ -1,7 +1,7 @@
 #!/bin/sh
 
 cd $(dirname $(realpath $0))
-. aux/mts/ussd.sh
+. .aux/mts/ussd.sh
 
 USSD_REQUEST="*100#"
 echo "===> $USSD_REQUEST <==="
