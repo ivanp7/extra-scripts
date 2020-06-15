@@ -1,2 +1,2 @@
 #/bin/sh
-curl wttr.in
+curl v2.wttr.in/$1
