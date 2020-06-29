@@ -20,64 +20,40 @@ backup ()
 
 ###############################################################################
 
-PRIMARY_HOST="home-1"
+BACKUP_HOST="home-2"
 
-backup_primary_wdc ()
+backup_seagate ()
 {
     local category="$1"
     shift 1
-    backup "$category" "$PRIMARY_HOST" wdc "$@"
+    backup "$category" "$BACKUP_HOST" seagate "$@"
 }
 
-backup_primary_hitachi ()
+backup_wdc ()
 {
     local category="$1"
     shift 1
-    backup "$category" "$PRIMARY_HOST" hitachi "$@"
-}
-
-###############################################################################
-
-SECONDARY_HOST="home-2"
-
-backup_secondary_samsung ()
-{
-    local category="$1"
-    shift 1
-    backup "$category" "$SECONDARY_HOST" samsung "$@"
-}
-
-backup_primary_seagate ()
-{
-    local category="$1"
-    shift 1
-    backup "$category" "$SECONDARY_HOST" seagate "$@"
+    backup "$category" "$BACKUP_HOST" wdc "$@"
 }
 
 ###############################################################################
 ###############################################################################
 
-backup_primary_wdc     activities
-backup_primary_wdc     archive
-backup_primary_wdc     encrypted-directories
-backup_primary_wdc     files
-backup_primary_wdc     git
-backup_primary_wdc     library
+backup_seagate activities
+backup_seagate archive
+backup_seagate downloads
+backup_seagate encrypted-directories
+backup_seagate files
+backup_seagate git
+backup_seagate library
+backup_seagate media
+backup_seagate vm
+backup_seagate Windows
 
-backup_primary_hitachi vm
-
-backup_secondary_samsung activities
-backup_secondary_samsung files
-backup_secondary_samsung git
-backup_secondary_samsung library
-
-backup_primary_seagate activities
-backup_primary_seagate archive
-backup_primary_seagate downloads
-backup_primary_seagate encrypted-directories
-backup_primary_seagate files
-backup_primary_seagate git
-backup_primary_seagate library
-backup_primary_seagate media
-backup_primary_seagate Windows
+backup_wdc     activities
+backup_wdc     archive
+backup_wdc     encrypted-directories
+backup_wdc     files
+backup_wdc     git
+backup_wdc     library
 
