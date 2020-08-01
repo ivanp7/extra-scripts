@@ -1,0 +1,8 @@
+#!/bin/sh
+
+INTERFACE=${1:-ppp0}
+DOWNLOAD_SPEED=${2:-2048}
+UPLOAD_SPEED=${3:-$DOWNLOAD_SPEED}
+
+sudo wondershaper -a $INTERFACE -d $DOWNLOAD_SPEED -u $UPLOAD_SPEED
+
