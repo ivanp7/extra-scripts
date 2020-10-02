@@ -1,10 +1,16 @@
 #!/bin/sh
 
-URL=$1
-FILENAME=$2
-START_TIME=$3
-DROP_FIRST_SECONDS=$4
-RECORD_DURATION=$5
+if [ "$#" -eq 0 ]
+then
+    echo "capture-video-segment.sh URL FILENAME START_TIME DROP_FIRST_SECONDS RECORD_DURATION"
+    exit 0
+fi
+
+URL="$1"
+FILENAME="$2"
+START_TIME="$3"
+DROP_FIRST_SECONDS="$4"
+RECORD_DURATION="$5"
 
 youtube_urls=$(youtube-dl -g "$URL")
 video_url=$(echo "$youtube_urls" | head -1)
