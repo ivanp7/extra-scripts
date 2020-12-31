@@ -12,7 +12,7 @@ START_TIME="$3"
 DROP_FIRST_SECONDS="$4"
 RECORD_DURATION="$5"
 
-youtube_urls=$(youtube-dl -g "$URL")
+youtube_urls=$(youtube-dl --youtube-skip-dash-manifest -g "$URL")
 video_url=$(echo "$youtube_urls" | head -1)
 audio_url=$(echo "$youtube_urls" | tail -1)
 
