@@ -6,5 +6,4 @@ keycode 174 = End NoSymbol End
 keycode 180 = Home NoSymbol Home
 keycode 163 = Insert NoSymbol Insert
 keycode 152 = Print NoSymbol Print
-keycode 164 = Caps_Lock NoSymbol Caps_Lock
 
