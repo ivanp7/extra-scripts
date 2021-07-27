@@ -56,4 +56,5 @@ backup_wdc     encrypted-directories
 backup_wdc     files
 backup_wdc     git
 backup_wdc     library
+backup_wdc     media
 
