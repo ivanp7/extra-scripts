@@ -18,7 +18,7 @@ write_query ()
     echo "AT+CUSD=1,$1,15" | sudo tee $MODEM_INPUT_DEVICE > /dev/null
 }
 
-read_responce ()
+read_response ()
 {
     sudo timeout 30 sudo grep -F -m 1 '+CUSD: 1,' $MODEM_OUTPUT_DEVICE | cut -d'"' -f2
 }
