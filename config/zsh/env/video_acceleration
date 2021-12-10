@@ -1,3 +1,0 @@
-command -v prime-run > /dev/null && export VIDEO_ACCELERATOR="prime-run"
-export MPV_OPTIONS="--vo=gpu --hwdec=auto"
-
