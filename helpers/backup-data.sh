@@ -21,6 +21,14 @@ backup ()
 ###############################################################################
 
 BACKUP_HOST_1="home-1"
+BACKUP_HOST_2="home-2"
+
+backup_seagate ()
+{
+    local category="$1"
+    shift 1
+    backup "$category" "$BACKUP_HOST_1" seagate "$@"
+}
 
 backup_hitachi ()
 {
@@ -29,14 +37,6 @@ backup_hitachi ()
     backup "$category" "$BACKUP_HOST_1" hitachi "$@"
 }
 
-BACKUP_HOST_2="home-2"
-
-backup_seagate ()
-{
-    local category="$1"
-    shift 1
-    backup "$category" "$BACKUP_HOST_2" seagate "$@"
-}
 
 backup_wdc ()
 {
@@ -47,6 +47,18 @@ backup_wdc ()
 
 ###############################################################################
 ###############################################################################
+
+backup_seagate activities
+backup_seagate archive
+backup_seagate encrypted-directories
+backup_seagate files
+backup_seagate git
+backup_seagate library
+backup_seagate media
+
+backup_seagate vm
+backup_seagate Windows
+backup_seagate downloads
 
 backup_hitachi activities
 backup_hitachi archive
@@ -63,16 +75,4 @@ backup_wdc     files
 backup_wdc     git
 backup_wdc     library
 backup_wdc     media
-
-backup_seagate activities
-backup_seagate archive
-backup_seagate encrypted-directories
-backup_seagate files
-backup_seagate git
-backup_seagate library
-backup_seagate media
-
-backup_seagate vm
-backup_seagate Windows
-backup_seagate downloads
 
