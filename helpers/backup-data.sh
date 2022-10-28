@@ -56,9 +56,10 @@ backup_seagate git
 backup_seagate library
 backup_seagate media
 
+backup_seagate directories
+backup_seagate downloads
 backup_seagate vm
 backup_seagate Windows
-backup_seagate downloads
 
 backup_hitachi activities
 backup_hitachi archive
