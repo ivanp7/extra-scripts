@@ -15,7 +15,7 @@ backup ()
     echo "--------------------------------------------------------------------"
     echo
 
-    remote -h "$host" -wo upload -l "$HOME/data/$category/" -r "/mnt/$disk/data/$category/" "$@" $OPTIONS --rsync-opts -arz
+    remote.py -h "$host" -wo upload -l "$HOME/data/$category/" -r "/mnt/$disk/data/$category/" "$@" $OPTIONS --rsync-opts=-arz
 }
 
 ###############################################################################
