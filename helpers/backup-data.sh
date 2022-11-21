@@ -21,7 +21,6 @@ backup ()
 ###############################################################################
 
 BACKUP_HOST_1="home-1"
-BACKUP_HOST_2="home-2"
 
 backup_seagate ()
 {
@@ -42,7 +41,7 @@ backup_wdc ()
 {
     local category="$1"
     shift 1
-    backup "$category" "$BACKUP_HOST_2" wdc "$@"
+    backup "$category" "$BACKUP_HOST_1" wdc "$@"
 }
 
 ###############################################################################
