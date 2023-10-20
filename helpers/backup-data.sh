@@ -2,77 +2,71 @@
 
 OPTIONS="$@"
 
-backup ()
+backup_cmd ()
 {
-    local category="$1"
-    local host="$2"
-    local disk="$3"
-    shift 3
+    local host="$1"
+    local disk="$2"
+    local object="$3"
+    local rsync_opts="$4"
+    shift 4
 
     echo
     echo "===================================================================="
-    echo "Backing up '$category' to disk '$disk' of host '$host'."
+    echo "Backing up '$object' to disk '$disk' of host '$host'."
     echo "--------------------------------------------------------------------"
     echo
 
-    remote.py -h "$host" -wo upload -l "$HOME/data/$category/" -r "/mnt/$disk/data/$category/" "$@" $OPTIONS --rsync-opts=-arz
+    remote.py -h "$host" -u ivanp7 -wo upload -l "$HOME/data/$object" -r "/mnt/$disk/data/$object" "$@" $OPTIONS --rsync-opts="$rsync_opts"
 }
+
+if [ -s "$HOME/data/changes.txt" ]
+then
+    echo "Error: changes.txt is not empty, please update target directory tree and clear changes.txt"
+    exit 1
+fi
 
 ###############################################################################
 
-BACKUP_HOST_1="home-1"
-
-backup_seagate ()
+backup1 ()
 {
-    local category="$1"
-    shift 1
-    backup "$category" "$BACKUP_HOST_1" seagate "$@"
-}
+    local host="$1"
+    local object="$2"
 
-backup_hitachi ()
-{
-    local category="$1"
-    shift 1
-    backup "$category" "$BACKUP_HOST_1" hitachi "$@"
-}
-
-
-backup_wdc ()
-{
-    local category="$1"
-    shift 1
-    backup "$category" "$BACKUP_HOST_1" wdc "$@"
+    backup_cmd "home-1" "$host" "$object" "-az"
 }
 
 ###############################################################################
 ###############################################################################
 
-backup_seagate activities
-backup_seagate archive
-backup_seagate encrypted-directories
-backup_seagate files
-backup_seagate git
-backup_seagate library
-backup_seagate media
+backup1 seagate tree.txt
+backup1 seagate activities
+backup1 seagate directories
+backup1 seagate downloads
+backup1 seagate encrypted
+backup1 seagate git
+backup1 seagate library
+backup1 seagate media
+backup1 seagate vm
 
-backup_seagate directories
-backup_seagate downloads
-backup_seagate vm
-backup_seagate Windows
 
-backup_hitachi activities
-backup_hitachi archive
-backup_hitachi encrypted-directories
-backup_hitachi files
-backup_hitachi git
-backup_hitachi library
-backup_hitachi media
+backup1 hitachi tree.txt
+backup1 hitachi activities
+# backup1 hitachi directories
+# backup1 hitachi downloads
+backup1 hitachi encrypted
+backup1 hitachi git
+backup1 hitachi library
+backup1 hitachi media
+# backup1 hitachi vm
 
-backup_wdc     activities
-backup_wdc     archive
-backup_wdc     encrypted-directories
-backup_wdc     files
-backup_wdc     git
-backup_wdc     library
-backup_wdc     media
+
+backup1 wdc     tree.txt
+backup1 wdc     activities
+# backup1 wdc     directories
+# backup1 wdc     downloads
+backup1 wdc     encrypted
+backup1 wdc     git
+backup1 wdc     library
+backup1 wdc     media
+# backup1 wdc     vm
 
